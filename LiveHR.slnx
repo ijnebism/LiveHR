@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="LiveHR.vcxproj" />
+  <Project Path="LiveHR.vcxproj" Id="0d2131ab-3c33-4bc7-ae8f-3e285e6d4b13" />
 </Solution>
