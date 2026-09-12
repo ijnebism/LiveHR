@@ -66,6 +66,41 @@ void Scanner::removeStaleDevice()
     );
 }
 
+winrt::fire_and_forget Scanner::connectToDevice(uint64_t address) {
+    connectedDevice = co_await winrt::Windows::Devices::Bluetooth::BluetoothLEDevice::FromBluetoothAddressAsync(address);
+
+    auto serviceResult = co_await connectedDevice.GetGattServicesForUuidAsync(
+        winrt::guid(L"0000180D-0000-1000-8000-00805F9B34FB"));
+    if (serviceResult.Services().Size() == 0) { co_return; }
+
+    auto hrService = serviceResult.Services().GetAt(0);
+    auto charResult = co_await hrService.GetCharacteristicsForUuidAsync(
+        winrt::guid(L"00002A37-0000-1000-8000-00805F9B34FB"));
+    if (charResult.Characteristics().Size() == 0) { co_return; }
+
+    hrCharacteristic = charResult.Characteristics().GetAt(0);
+
+    hrCharacteristic.ValueChanged([this](GattCharacteristic const&, GattValueChangedEventArgs const& args)
+        {
+            uint16_t bpm = parseHeartRate(args.CharacteristicValue());
+            latestHeartRate = bpm;
+        });
+
+    auto status = co_await hrCharacteristic.WriteClientCharacteristicConfigurationDescriptorAsync(
+        GattClientCharacteristicConfigurationDescriptorValue::Notify);
+
+    if (status == GattCommunicationStatus::Success) {
+        connected = true;
+    }
+}
+
+uint16_t Scanner::parseHeartRate(winrt::Windows::Storage::Streams::IBuffer const& buffer)
+{
+    auto reader = winrt::Windows::Storage::Streams::DataReader::FromBuffer(buffer);
+    uint8_t flags = reader.ReadByte();
+    return (flags & 0x01) ? reader.ReadUInt16() : reader.ReadByte();
+}
+
 std::vector<BluetoothDevice> Scanner::getDevices() const {
     auto sortedDevices = devices;
 
