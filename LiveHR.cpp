@@ -32,6 +32,7 @@ int main()
 	sf::Font font;
 	winrt::init_apartment();
 	sf::RenderWindow window(sf::VideoMode({800, 600}), "Heart Rate Monitor");
+	window.setFramerateLimit(60);
 	sf::RenderWindow hrWindow;
 	sf::Texture heartIcon;
 	bool isScanning = false;
@@ -117,6 +118,7 @@ int main()
 			sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 			sf::Vector2u hrSize = hrWindow.getSize();
 			makeTransparentClickThrough(hrWindow);
+			hrWindow.setFramerateLimit(120);
 
 			hrWindow.setPosition({ static_cast<int>(desktop.size.x - hrSize.x) - 100, 10 });
 
