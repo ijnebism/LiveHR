@@ -163,7 +163,11 @@
     <ClInclude Include="BluetoothDevice.hpp" />
     <ClInclude Include="Button.hpp" />
     <ClInclude Include="Paths.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scanner.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LiveHR.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -67,6 +67,9 @@ int main()
 	if (!heartIcon.loadFromFile(assetsDir / "heart-rate.png")) {
 		return -1;
 	}
+	sf::Image heartImage = heartIcon.copyToImage();
+
+	window.setIcon(heartImage);
 
 	sf::Sprite heartSprite(heartIcon);
 
