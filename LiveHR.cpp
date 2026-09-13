@@ -31,14 +31,34 @@ int main()
 	Scanner scanner;
 	sf::Font font;
 	winrt::init_apartment();
+	std::filesystem::path assetsDir = getExecutablePath() / "assets";
+
 	sf::RenderWindow window(sf::VideoMode({800, 600}), "Heart Rate Monitor");
+	HWND hwnd = window.getNativeHandle();
+
+	COLORREF topColour = RGB(41, 53, 60);
+	COLORREF textColour = RGB(230, 230, 230);
+
+	DwmSetWindowAttribute(
+		hwnd,
+		DWMWA_CAPTION_COLOR,
+		&topColour,
+		sizeof(topColour)
+	);
+
+	DwmSetWindowAttribute(
+		hwnd,
+		DWMWA_TEXT_COLOR,
+		&textColour,
+		sizeof(textColour)
+	);
+
 	window.setFramerateLimit(60);
 	sf::RenderWindow hrWindow;
 	sf::Texture heartIcon;
 	bool isScanning = false;
 	bool hrWindowOpened = false;
 
-	std::filesystem::path assetsDir = getExecutablePath() / "assets";
 
 	if (!font.openFromFile(assetsDir / "ArchivoBlack-Regular.ttf")) {
 		return -1;
