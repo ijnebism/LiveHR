@@ -94,6 +94,13 @@ winrt::fire_and_forget Scanner::connectToDevice(uint64_t address) {
     }
 }
 
+void Scanner::disconnectDevice() {
+    if (connectedDevice) {
+        connectedDevice.Close();
+        connectedDevice = nullptr;
+    }
+}
+
 uint16_t Scanner::parseHeartRate(winrt::Windows::Storage::Streams::IBuffer const& buffer)
 {
     auto reader = winrt::Windows::Storage::Streams::DataReader::FromBuffer(buffer);

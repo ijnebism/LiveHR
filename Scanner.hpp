@@ -18,6 +18,7 @@ public:
 	void stopScanning();
 	void removeStaleDevice();
 	winrt::fire_and_forget connectToDevice(uint64_t address);
+	void disconnectDevice();
 	std::vector<BluetoothDevice> getDevices() const;
 	std::atomic<uint16_t> latestHeartRate{ 0 };
 	std::atomic<bool> connected{ false };
