@@ -95,10 +95,15 @@ winrt::fire_and_forget Scanner::connectToDevice(uint64_t address) {
 }
 
 void Scanner::disconnectDevice() {
+    hrCharacteristic = nullptr;
+
     if (connectedDevice) {
         connectedDevice.Close();
         connectedDevice = nullptr;
     }
+
+    connected = false;
+    latestHeartRate = 0;
 }
 
 uint16_t Scanner::parseHeartRate(winrt::Windows::Storage::Streams::IBuffer const& buffer)

@@ -99,11 +99,20 @@ int main()
 			std::string label = devices[i].name.empty()
 				? std::to_string(devices[i].address) : devices[i].name;
 
+			auto connectedDevice = scanner.getConnectedDevice();
+
+
+			if (connectedDevice  && devices[i].address == connectedDevice.BluetoothAddress()) {
+				connectTexts.emplace_back(font, "Disconnect", 16);
+			}
+			else {
+				connectTexts.emplace_back(font, "Connect", 16);
+			}
+
 			deviceTexts.emplace_back(font, label, 16);
 			deviceTexts.back().setFillColor(sf::Color(41, 53, 60));
 			deviceTexts.back().setPosition({ 20.f, rowY + i * rowHeight });
 
-			connectTexts.emplace_back(font, "Connect", 16);
 			connectTexts.back().setFillColor(sf::Color(41, 53, 60));
 
 			connectButtons.emplace_back(
@@ -116,6 +125,7 @@ int main()
 
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
+				scanner.disconnectDevice();
 				window.close();
 			}
 			if (scanBtn.isClicked(mousePos, sf::Mouse::Button::Left, *event)) {
@@ -131,7 +141,17 @@ int main()
 
 			for (size_t i = 0; i < connectButtons.size(); ++i) {
 				if (connectButtons[i].isClicked(mousePos, sf::Mouse::Button::Left, *event)) {
-					scanner.connectToDevice(devices[i].address);
+					auto connectedDevice = scanner.getConnectedDevice();
+
+					if (connectedDevice && devices[i].address == connectedDevice.BluetoothAddress())
+					{
+						scanner.disconnectDevice();
+						hrWindow.close();
+						hrWindowOpened = false;
+					}
+					else {
+						scanner.connectToDevice(devices[i].address);
+					}
 				}
 			}
 		}
@@ -151,7 +171,11 @@ int main()
 
 		if (hrWindow.isOpen()) {
 			while (const std::optional hrEvent = hrWindow.pollEvent()) {
-				if (hrEvent->is<sf::Event::Closed>()) hrWindow.close();
+				if (hrEvent->is<sf::Event::Closed>()) { 
+					scanner.disconnectDevice();
+					hrWindow.close(); 
+					hrWindowOpened = false;
+				}
 			}
 		}
 

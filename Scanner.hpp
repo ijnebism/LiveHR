@@ -22,6 +22,7 @@ public:
 	std::vector<BluetoothDevice> getDevices() const;
 	std::atomic<uint16_t> latestHeartRate{ 0 };
 	std::atomic<bool> connected{ false };
+	winrt::Windows::Devices::Bluetooth::BluetoothLEDevice getConnectedDevice() const { return connectedDevice;  };
 	uint16_t getLatestHeartRate() const { return latestHeartRate; }
 	bool isConnected() const { return connected; }
 private:
