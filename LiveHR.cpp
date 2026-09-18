@@ -30,6 +30,8 @@ int main()
 {
 	Scanner scanner;
 	sf::Font font;
+	sf::Clock clock;
+	float pulsePhase = 0.0f;
 	winrt::init_apartment();
 	std::filesystem::path assetsDir = getExecutablePath() / "assets";
 
@@ -201,7 +203,23 @@ int main()
 			float iconSize = static_cast<float>(winSize.y) - (padding * 2.f);
 			sf::Vector2u texSize = heartSprite.getTexture().getSize();
 			float scale = iconSize / static_cast<float>(texSize.y);
-			heartSprite.setScale({ scale, scale });
+
+			float bpm = scanner.getLatestHeartRate();
+
+			if (bpm > 0)
+			{
+				float dt = clock.restart().asSeconds();
+
+				float beatsPerSecond = bpm / 60.0f;
+				pulsePhase += dt * beatsPerSecond;
+				pulsePhase = std::fmod(pulsePhase, 1.0f);
+				float pulse = (std::sin(pulsePhase * 2.0f * 3.14159265359f) + 1.0f) / 2.0f;
+
+				float pulseScale = scale * (1.0f + pulse * 0.05f);
+
+				heartSprite.setScale({ pulseScale, pulseScale });
+			}
+
 			heartSprite.setPosition({ padding, padding });
 
 			hrWindow.draw(heartSprite);
