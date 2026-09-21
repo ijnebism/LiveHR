@@ -53,13 +53,22 @@ void Scanner::removeStaleDevice()
         std::remove_if(
             devices.begin(),
             devices.end(),
-            [now](const BluetoothDevice& device)
+            [now, this](const BluetoothDevice& device)
             {
-                auto elapsed =
-                    std::chrono::duration_cast<std::chrono::seconds>(
-                        now - device.lastSeen
-                    );
-                return elapsed.count() > 3;
+                if (isConnected()) {
+                    auto removeDevice =
+                        device.address != connectedDevice.BluetoothAddress();
+                    return removeDevice;
+                }
+                else {
+                    auto elapsed =
+                        std::chrono::duration_cast<std::chrono::seconds>(
+                            now - device.lastSeen
+                        );
+
+
+                    return elapsed.count() > 3;
+                }
             }
         ),
         devices.end()

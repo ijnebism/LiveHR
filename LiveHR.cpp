@@ -159,6 +159,9 @@ int main()
 		}
 
 		if (scanner.isConnected() && !hrWindowOpened) {
+			scanner.stopScanning();
+			isScanning = false;
+			scanBtn.setString("Start Scan");
 			hrWindow.create(sf::VideoMode({ 300, 100 }), "Heart Rate", sf::Style::None);
 			sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 			sf::Vector2u hrSize = hrWindow.getSize();
@@ -195,7 +198,7 @@ int main()
 		window.display();
 
 		if (hrWindow.isOpen()) {
-			hrWindow.clear(sf::Color::Transparent);
+			hrWindow.clear(sf::Color(0,0,0,128));
 			sf::Vector2u winSize = hrWindow.getSize();
 			float padding = 20.f;
 
