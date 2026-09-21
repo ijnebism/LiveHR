@@ -65,8 +65,6 @@ void Scanner::removeStaleDevice()
                         std::chrono::duration_cast<std::chrono::seconds>(
                             now - device.lastSeen
                         );
-
-
                     return elapsed.count() > 3;
                 }
             }
