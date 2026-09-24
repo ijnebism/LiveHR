@@ -3,6 +3,7 @@
 #include "Scanner.hpp"
 #include "Paths.hpp"
 #include "Button.hpp"
+#include "TextField.hpp"
 #include <winrt/windows.devices.bluetooth.h>
 #include <winrt/windows.devices.bluetooth.advertisement.h>
 #include <winrt/windows.devices.enumeration.h>
@@ -105,6 +106,29 @@ int main() {
 	bool hrPinned = false;  
 	bool hrLocked = false; 
 
+	TextField rField(font, { 20.f, 120.f }, { 50.f, 28.f }, 255, sf::Color(230, 230, 230), sf::Color(41, 53, 60));
+	TextField gField(font, { 90.f, 120.f }, { 50.f, 28.f }, 255, sf::Color(230, 230, 230), sf::Color(41, 53, 60));
+	TextField bField(font, { 160.f, 120.f }, { 50.f, 28.f }, 255, sf::Color(230, 230, 230), sf::Color(41, 53, 60));
+	TextField aField(font, { 230.f, 120.f }, { 50.f, 28.f }, 255, sf::Color(230, 230, 230), sf::Color(41, 53, 60));
+
+	rField.setValue(255);
+	gField.setValue(255);
+	bField.setValue(255);
+	aField.setValue(255);
+
+	sf::Text rLabel(font, "R", 14);
+	sf::Text gLabel(font, "G", 14);
+	sf::Text bLabel(font, "B", 14);
+	sf::Text aLabel(font, "Opacity", 14);
+	rLabel.setFillColor(sf::Color(41, 53, 60));
+	gLabel.setFillColor(sf::Color(41, 53, 60));
+	bLabel.setFillColor(sf::Color(41, 53, 60));
+	aLabel.setFillColor(sf::Color(41, 53, 60));
+	rLabel.setPosition({ 20.f, 100.f });
+	gLabel.setPosition({ 90.f, 100.f });
+	bLabel.setPosition({ 160.f, 100.f });
+	aLabel.setPosition({ 230.f, 100.f });
+
 	while (window.isOpen())
 	{
 		auto devices = scanner.getDevices();
@@ -171,6 +195,10 @@ int main() {
 					lockBtn.setString(hrLocked ? "Unlock" : "Lock");
 					makeClickThrough(hrWindow.getNativeHandle(), hrLocked);
 				}
+				rField.handleInput(*event, window);
+				gField.handleInput(*event, window);
+				bField.handleInput(*event, window);
+				aField.handleInput(*event, window);
 			}
 
 			for (size_t i = 0; i < connectButtons.size(); ++i) {
@@ -257,12 +285,21 @@ int main() {
 			lockBtn.update(mousePos);
 			pinBtn.render(window);
 			lockBtn.render(window);
+			window.draw(rLabel);
+			window.draw(gLabel);
+			window.draw(bLabel);
+			window.draw(aLabel);
+			rField.render(window);
+			gField.render(window);
+			bField.render(window);
+			aField.render(window);
 		}
 
 		window.display();
 
 		if (hrWindow.isOpen()) {
-			hrWindow.clear(sf::Color(0,0,0,0));
+			float norm = aField.getValue() / 255.f;
+			hrWindow.clear(sf::Color(rField.getValue() * norm,gField.getValue()* norm, bField.getValue()* norm,aField.getValue()));
 			sf::Vector2u winSize = hrWindow.getSize();
 			float padding = 20.f;
 
