@@ -158,6 +158,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="LiveHR.cpp" />
     <ClCompile Include="Scanner.cpp" />
+    <ClCompile Include="TextField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BluetoothDevice.hpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Paths.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scanner.hpp" />
+    <ClInclude Include="TextField.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiveHR.rc" />
