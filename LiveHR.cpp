@@ -306,6 +306,7 @@ int main() {
 
 			float iconSize = static_cast<float>(winSize.y) - (padding * 2.f);
 			sf::Vector2u texSize = heartSprite.getTexture().getSize();
+			heartSprite.setOrigin({ texSize.x / 2.f, texSize.y / 2.f });
 			float scale = iconSize / static_cast<float>(texSize.y);
 
 			float bpm = scanner.getLatestHeartRate();
@@ -324,7 +325,7 @@ int main() {
 				heartSprite.setScale({ pulseScale, pulseScale });
 			}
 
-			heartSprite.setPosition({ padding, padding });
+			heartSprite.setPosition({ padding + iconSize / 2.f, padding + iconSize / 2.f });
 
 			hrWindow.draw(heartSprite);
 
